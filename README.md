@@ -23,7 +23,10 @@ Use this spec for simulation and invariant checking:
 quint run --invariant safety --main gwts_standard gwts_lattice_agreement.qnt
 
 # Run the simulator against a specific invariant
-quint run --invariant comparability --main gwts_standard --max-steps 500 gwts_lattice_agreement.qnt
+quint run --invariant comparability \
+          --main gwts_standard \
+          --max-steps 500 \
+          gwts_lattice_agreement.qnt
 ```
 
 ### `gwts_buggy_safe_alg4_tlc.qnt`
@@ -38,7 +41,8 @@ No fairness assumption is needed, the block is structural.
 
 ```sh
 # Find the lasso counterexample (should report a violation)
-quint verify --temporal inclusivity_liveness_alg4  gwts_buggy_safe_alg4_tlc.qnt --backend=tlc
+quint verify --temporal inclusivity_liveness_alg4 \
+             gwts_buggy_safe_alg4_tlc.qnt --backend=tlc
 ```
 
 ### `gwts_correct_safe_alg4_tlc.qnt`
@@ -52,5 +56,6 @@ Strong fairness is required to prevent spurious stutter counterexamples.
 
 ```sh
 # Verify liveness holds with the correct SAFE (should report no violation)
-quint verify --temporal inclusivity_liveness_correct gwts_correct_safe_alg4_tlc.qnt --backend=tlc
+quint verify --temporal inclusivity_liveness_correct \
+             gwts_correct_safe_alg4_tlc.qnt --backend=tlc
 ```
