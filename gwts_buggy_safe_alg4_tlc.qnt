@@ -56,7 +56,7 @@
 // never return true for a cross-round proposed_set.
 //
 // Run with:
-//   quint verify --temporal inclusivity_liveness_alg4 gwts_buggy_safe_alg4_tlc.qnt
+//   quint verify --temporal inclusivity_liveness_alg4 gwts_buggy_safe_alg4_tlc.qnt --backend=tlc
 
 module gwts_buggy_safe_alg4_tlc {
   import basicSpells.* from "choreo/spells/basicSpells"
@@ -625,7 +625,7 @@ module gwts_buggy_safe_alg4_tlc {
   // MAIN STEP — nondeterministically pick any enabled action
   // =========================================================================
 
-  action step = any {
+  action step_n1 = any {
     broadcast_val_n1,
     update_svs_n1,
     collect_vals_n1,
@@ -635,6 +635,9 @@ module gwts_buggy_safe_alg4_tlc {
     decide_n1,
     advance_round_n1,
     advance_safe_round_n1,
+  }
+
+  action step_n2 = any {
     broadcast_val_n2,
     update_svs_n2,
     collect_vals_n2,
@@ -645,6 +648,8 @@ module gwts_buggy_safe_alg4_tlc {
     advance_round_n2,
     advance_safe_round_n2,
   }
+
+  action step = any { step_n1, step_n2 }
 
   // =========================================================================
   // TEMPORAL PROPERTIES
@@ -664,11 +669,12 @@ module gwts_buggy_safe_alg4_tlc {
   // No fairness assumption is needed — the block is structural.
   //
   // Run:
-  //   quint verify --temporal inclusivity_liveness_alg4 gwts_buggy_safe_alg4_tlc.qnt
+  //   quint verify --temporal inclusivity_liveness_alg4 gwts_buggy_safe_alg4_tlc.qnt --backend=tlc
   // ---------------------------------------------------------------------------
   temporal inclusivity_liveness_alg4 =
-    leadsTo(n1.val_sent.contains(1), lat_le(R1_VALS, n1.decided_set))
-    and leadsTo(n2.val_sent.contains(1), lat_le(R1_VALS, n2.decided_set))
+    (strongFair(step_n1, n1) and strongFair(step_n2, n2)) implies
+    ((n1.val_sent.contains(1) leadsTo lat_le(R1_VALS, n1.decided_set))
+      and (n2.val_sent.contains(1) leadsTo lat_le(R1_VALS, n2.decided_set)))
 
   // =========================================================================
   // SAFETY INVARIANTS (optional cross-checks)

@@ -56,6 +56,6 @@ Strong fairness is required to prevent spurious stutter counterexamples.
 
 ```sh
 # Verify liveness holds with the correct SAFE (should report no violation)
-quint verify --temporal inclusivity_liveness_correct \
+quint verify --temporal inclusivity_liveness_alg4 \
              gwts_correct_safe_alg4_tlc.qnt --backend=tlc
 ```

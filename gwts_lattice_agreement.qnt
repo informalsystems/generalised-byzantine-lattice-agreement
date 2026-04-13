@@ -972,19 +972,19 @@ module GWTSLatticeAgreement {
   // Witness: a decision is reachable.
   // Holds until some node decides; Quint reports the violating trace as the
   // example execution showing a decision.
-  // Run with: quint run --invariant never_decided gwts_lattice_agreement.qnt
+  // Run with: quint run --invariant never_decided gwts_lattice_agreement.qnt --main gwts_standard
   val never_decided =
     NODES.forall(p => not(s.system.get(p).decided))
 
   // Witness: round 1 is reachable.
   // Holds until some node advances to proposer_round=1.
-  // Run with: quint run --invariant never_round1 gwts_lattice_agreement.qnt
+  // Run with: quint run --invariant never_round1 gwts_lattice_agreement.qnt --main gwts_standard
   val never_round1 =
     NODES.forall(p => s.system.get(p).proposer_round < 1)
 
   // Witness: safe_round advancement is reachable.
   // Holds until some acceptor's safe_round increments beyond 0.
-  // Run with: quint run --invariant never_safe_advance gwts_lattice_agreement.qnt
+  // Run with: quint run --invariant never_safe_advance gwts_lattice_agreement.qnt --main gwts_standard
   val never_safe_advance =
     NODES.forall(p => s.system.get(p).safe_round == 0)
 

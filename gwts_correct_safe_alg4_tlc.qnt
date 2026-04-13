@@ -31,7 +31,7 @@
 // Decide action is simply never taken by the scheduler.
 //
 // Run with:
-//   quint verify --temporal inclusivity_liveness_correct gwts_correct_safe_alg4_tlc.qnt
+//   quint verify --temporal inclusivity_liveness_alg4 gwts_correct_safe_alg4_tlc.qnt --backend=tlc
 
 module gwts_correct_safe_alg4_tlc {
   import basicSpells.* from "choreo/spells/basicSpells"
@@ -625,7 +625,7 @@ module gwts_correct_safe_alg4_tlc {
   // =========================================================================
 
   // ---------------------------------------------------------------------------
-  // inclusivity_liveness_correct — once a node has broadcast its round-1 Val,
+  // inclusivity_liveness_alg4 — once a node has broadcast its round-1 Val,
   // it must eventually decide on R1_VALS = {2}.
   //
   // Under the correct SAFE (element-wise: ∀v. ∃r. v ∈ svs[r]), round-1 AckReqs
@@ -635,12 +635,12 @@ module gwts_correct_safe_alg4_tlc {
   // spurious counterexample where the Decide action is enabled but never taken.
   //
   // Run:
-  //   quint verify --temporal inclusivity_liveness_correct gwts_correct_safe_alg4_tlc.qnt
+  //   quint verify --temporal inclusivity_liveness_alg4 gwts_correct_safe_alg4_tlc.qnt --backend=tlc
   // ---------------------------------------------------------------------------
-  temporal inclusivity_liveness_correct =
+  temporal inclusivity_liveness_alg4 =
     (strongFair(step_n1, n1) and strongFair(step_n2, n2)) implies
-    (leadsTo(n1.val_sent.contains(1), lat_le(R1_VALS, n1.decided_set))
-     and leadsTo(n2.val_sent.contains(1), lat_le(R1_VALS, n2.decided_set)))
+    ((n1.val_sent.contains(1) leadsTo lat_le(R1_VALS, n1.decided_set))
+      and (n2.val_sent.contains(1) leadsTo lat_le(R1_VALS, n2.decided_set)))
 
   // =========================================================================
   // SAFETY INVARIANTS (optional cross-checks)
